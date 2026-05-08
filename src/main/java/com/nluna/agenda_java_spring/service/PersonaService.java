@@ -7,11 +7,13 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PersonaService implements IPersonaService {
 
     @Autowired
@@ -19,36 +21,51 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public List<Persona> personList() {
-        return personaRepository.findAll();
+        log.info("PersonaService.personList");
+        List<Persona> personas = personaRepository.findAll();
+        log.info("PersonaService.personList resultCount={}", personas.size());
+        return personas;
     }
 
     @Override
     public Persona findPersonById(Integer idPersona) {
+        log.info("PersonaService.findPersonById id={}", idPersona);
         return personaRepository.findById(idPersona).orElse(null);
     }
 
     @Override
     public List<Persona> findPeopleByPersonalData(String name, String lastName, String phone, String email) {
-        return personaRepository.findAll(buildPersonalDataSpecification(name, lastName, phone, email));
+        log.info("PersonaService.findPeopleByPersonalData nombre={} apellido={} telefono={} email={}", name, lastName, phone, email);
+        List<Persona> personas = personaRepository.findAll(buildPersonalDataSpecification(name, lastName, phone, email));
+        log.info("PersonaService.findPeopleByPersonalData resultCount={}", personas.size());
+        return personas;
     }
 
     @Override
     public List<Persona> findPeopleByCityData(List<String> cities, String province, List<String> countries) {
-        return personaRepository.findAll(buildCityDataSpecification(cities, province, countries));
+        log.info("PersonaService.findPeopleByCityData ciudades={} provincia={} paises={}", cities, province, countries);
+        List<Persona> personas = personaRepository.findAll(buildCityDataSpecification(cities, province, countries));
+        log.info("PersonaService.findPeopleByCityData resultCount={}", personas.size());
+        return personas;
     }
 
     @Override
     public List<Persona> findPeopleByNameLastNameAndCities(String name, String lastName, List<String> cities) {
-        return personaRepository.findAll(buildNameLastNameAndCitiesSpecification(name, lastName, cities));
+        log.info("PersonaService.findPeopleByNameLastNameAndCities nombre={} apellido={} ciudades={}", name, lastName, cities);
+        List<Persona> personas = personaRepository.findAll(buildNameLastNameAndCitiesSpecification(name, lastName, cities));
+        log.info("PersonaService.findPeopleByNameLastNameAndCities resultCount={}", personas.size());
+        return personas;
     }
 
     @Override
     public void savePerson(Persona person) {
+        log.info("PersonaService.savePerson id={} nombre={} apellido={}", person.getIdPersona(), person.getNombre(), person.getApellido());
         personaRepository.save(person);
     }
 
     @Override
     public void deletePerson(Persona person) {
+        log.info("PersonaService.deletePerson id={} nombre={} apellido={}", person.getIdPersona(), person.getNombre(), person.getApellido());
         personaRepository.delete(person);
     }
 
