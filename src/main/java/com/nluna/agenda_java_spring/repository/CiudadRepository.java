@@ -5,4 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CiudadRepository extends JpaRepository<Ciudad, Integer> {
 
+    Ciudad findFirstByNombreIgnoreCaseAndProvinciaIgnoreCaseAndPaisIgnoreCase(
+            String nombre,
+            String provincia,
+            String pais
+    );
+
 }
